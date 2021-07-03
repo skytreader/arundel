@@ -1,0 +1,10 @@
+version: '3'
+services:
+  elasticsearch:
+    image: 'docker.elastic.co/elasticsearch/elasticsearch:7.13.2'
+  arundel:
+    build: .
+    volumes:
+      - ~/kode/arundel-test:/root/code
+    depends_on:
+      - elasticsearch
