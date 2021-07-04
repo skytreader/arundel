@@ -2,9 +2,14 @@ version: '3'
 services:
   elasticsearch:
     image: 'docker.elastic.co/elasticsearch/elasticsearch:7.13.2'
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
   arundel:
     build: .
     volumes:
       - ~/kode/arundel-test:/root/code
     depends_on:
       - elasticsearch
+    ports:
+      - "8000:8000"
