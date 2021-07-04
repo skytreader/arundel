@@ -1,5 +1,23 @@
 from bottle import route, run
 
+class IndexIgnore(object):
+
+    def __init__(self, ignorefilename):
+        self.ignores = set()
+        with open(ignorefilename) as ignorefile:
+            for line in ignorefile:
+                self.ignores.add(self.__normalize_dirname(line))
+
+    def __normalize_dirname(self, dirname):
+        dir_stripped = dirname.strip()
+        if dir_stripped[-1] == '/':
+            return dir_stripped[:-1]
+        
+        return dir_stripped
+
+    def should_ignore(self, dirname):
+        return self.__normalize_dirname(dirname) in self.ignores
+
 @route("/")
 def root():
     return "Welcome to Arundel"
