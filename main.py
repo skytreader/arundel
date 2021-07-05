@@ -2,11 +2,12 @@ from bottle import route, run
 
 class IndexIgnore(object):
 
-    def __init__(self, ignorefilename):
+    def __init__(self, ignorefilename=None):
         self.ignores = set()
-        with open(ignorefilename) as ignorefile:
-            for line in ignorefile:
-                self.ignores.add(self.__normalize_dirname(line))
+        if ignorefilename:
+            with open(ignorefilename) as ignorefile:
+                for line in ignorefile:
+                    self.ignores.add(self.__normalize_dirname(line))
 
     def __normalize_dirname(self, dirname):
         dir_stripped = dirname.strip()
@@ -17,6 +18,12 @@ class IndexIgnore(object):
 
     def should_ignore(self, dirname):
         return self.__normalize_dirname(dirname) in self.ignores
+    
+    def extend(self, ignorefilename):
+        new_indexignore = IndexIgnore(ignorefilename)
+        for item in self.ignores:
+            new_indexignore.add(item)
+        return new_indexignore
 
 @route("/")
 def root():
