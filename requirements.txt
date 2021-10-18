@@ -1,2 +1,2 @@
-elasticsearch==7.13.1
+elasticsearch==7.15.1
 bottle==0.12.19

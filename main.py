@@ -1,4 +1,9 @@
-from bottle import route, run
+from bottle import request, route, run
+from elasticsearch import Elasticsearch
+
+es_indexer = Elasticsearch(["elasticsearch:9200", "elasticsearch:9300"])
+INDEX_NAME = "codex-arundel"
+
 
 class IndexIgnore(object):
 
@@ -24,6 +29,18 @@ class IndexIgnore(object):
         for item in self.ignores:
             new_indexignore.add(item)
         return new_indexignore
+
+@route("/_index", method="POST")
+def index():
+    filename = request.forms["filename"]
+    body = request.body.read()
+    document = {
+        "filename": filename,
+        "body": str(body)
+    }
+
+    es_indexer.index(index=INDEX_NAME, id=1, body=document)
+    return "OK"
 
 @route("/")
 def root():
