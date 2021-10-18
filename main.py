@@ -39,7 +39,7 @@ def index():
         "body": str(body)
     }
 
-    es_indexer.index(index=INDEX_NAME, id=1, body=document)
+    es_indexer.index(index=INDEX_NAME, id=1, document=document)
     return "OK"
 
 @route("/")
